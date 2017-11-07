@@ -92,7 +92,7 @@ tracks/1/keys = {
 
 [node name="bird" type="RigidBody2D"]
 
-transform/pos = Vector2( 22, 60.9853 )
+transform/pos = Vector2( 22, 120 )
 input/pickable = false
 shapes/0/shape = SubResource( 1 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )

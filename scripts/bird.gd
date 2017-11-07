@@ -11,6 +11,8 @@ const STATE_FLAPPING = 1
 const STATE_HIT = 2
 const STATE_GROUNDED = 3
 
+signal state_changed
+
 # set_linear_velocity => 'move o bird para frente'
 func _ready():
 	set_process_input(true)
@@ -39,6 +41,8 @@ func set_state(new_state):
 		state = HitState.new(self)
 	elif new_state == STATE_GROUNDED:
 		state = GroundedState.new(self)
+	
+	emit_signal("state_changed", self)
 	pass
 
 func get_state():
@@ -74,7 +78,9 @@ class FlyingState:
 		pass
 	
 	func exit():
-		bird.set_gravity_state(prev_gravit_state)
+		bird.set_gravity_scale(prev_gravit_state)
+		bird.get_node("anim").stop()
+		bird.get_node("anim_sprite").set_pos(Vector2(0, 0))
 		pass
 
 # clas FlappingState ----------------------------------------------------------------------------------------------------
@@ -86,6 +92,7 @@ class FlappingState:
 		self.bird = bird
 		
 		bird.set_linear_velocity(Vector2(bird.speed, bird.get_linear_velocity().y))
+		flap()
 		pass
 	
 	
