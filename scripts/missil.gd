@@ -6,6 +6,7 @@ onready var camera = utils.get_main_node().get_node("camera")
 
 func _ready():
 	set_process(true)
+	add_to_group("missils")
 	pass
 
 func _process(delta):

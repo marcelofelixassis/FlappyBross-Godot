@@ -17,6 +17,8 @@ signal state_changed
 func _ready():
 	set_process_input(true)
 	set_fixed_process(true)
+	
+	connect("body_enter", self, "_on_body_enter")
 	pass
 
 # rad2deg => 'vir ao bird 30 graus para o norte'
@@ -28,6 +30,11 @@ func _fixed_process(delta):
 # event.is_action_pressed => 'utiliza as teclas definidas(space, F) para executar [func flap()]'
 func _input(event):
 	state.input(event)
+	pass
+
+func _on_body_enter(other_body):
+	if state.has_method("on_body_enter"):
+		state.on_body_enter(other_body)
 	pass
 
 func set_state(new_state):
@@ -111,6 +118,9 @@ class FlappingState:
 			flap()
 		pass
 	
+	func on_body_enter(other_body):
+		
+		pass
 	
 	# func set_linear_velocity => 'impulsionar o bird para cima'
 	# set_angular_velocity => 'faz com que o bird gire'
