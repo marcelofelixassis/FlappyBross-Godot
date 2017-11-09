@@ -119,7 +119,10 @@ class FlappingState:
 		pass
 	
 	func on_body_enter(other_body):
-		
+		if other_body.is_in_group(game.GROUP_MISSILS):
+			bird.set_state(bird.STATE_HIT)
+		elif other_body.is_in_group(game.GROUP_GROUNDS):
+			bird.set_state(bird.STATE_GROUNDED)
 		pass
 	
 	# func set_linear_velocity => 'impulsionar o bird para cima'
@@ -143,11 +146,22 @@ class HitState:
 	
 	func _init(bird):
 		self.bird = bird
+		bird.set_linear_velocity(Vector2(0, 0))
+		bird.set_angular_velocity(2)
+		
+		var other_body = bird.get_colliding_bodies()[0]
+		bird.add_collision_exception_with(other_body)
+		pass
 	
 	func update(delta):
 		pass
 	
 	func input(event):
+		pass
+	
+	func on_body_enter(other_body):
+		if other_body.is_in_group(game.GROUP_GROUNDS):
+			bird.set_state(bird.STATE_GROUNDED)
 		pass
 	
 	func exit():
@@ -160,6 +174,9 @@ class GroundedState:
 	
 	func _init(bird):
 		self.bird = bird
+		bird.set_linear_velocity(Vector2(0, 0))
+		bird.set_angular_velocity(0)
+		pass
 	
 	func update(delta):
 		pass
