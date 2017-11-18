@@ -12,8 +12,6 @@ func _on_body_enter(other_body):
 		if game.score_current - 1 == -1:
 			var bird = utils.get_main_node().get_node("bird")
 			bird.set_state(bird.STATE_GROUNDED)
-			bird.set_linear_velocity(Vector2(0, 0))
-			bird.set_angular_velocity(0)
 			game.score_current -= 1
 		elif game.score_current - 1 != -1:
 			game.score_current -= 1

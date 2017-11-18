@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=1]
+[gd_scene load_steps=10 format=1]
 
 [ext_resource path="res://scripts/camera.gd" type="Script" id=1]
 [ext_resource path="res://scenes/bird.tscn" type="PackedScene" id=2]
@@ -6,7 +6,7 @@
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/spawner_missil.tscn" type="PackedScene" id=5]
 [ext_resource path="res://sprites/instructions_bross.png" type="Texture" id=6]
-[ext_resource path="res://fonts/font_score.TTF" type="DynamicFontData" id=7]
+[ext_resource path="res://sprites/number_large_0.png" type="Texture" id=7]
 
 [sub_resource type="GDScript" id=1]
 
@@ -28,28 +28,44 @@ func _on_pressed():
 	hide()
 	pass"
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="GDScript" id=2]
 
-font/size = 14
-font/use_mipmaps = false
-font/use_filter = false
-font/font = ExtResource( 7 )
+resource/name = "hbox_score"
+script/source = "#script: hbox_score
+extends HBoxContainer
 
-[sub_resource type="GDScript" id=3]
-
-resource/name = "lbl_score"
-script/source = "#script: lbl_score
-
-extends Label
+const sprite_numbers = [
+	preload(\"res://sprites/number_large_0.png\"),
+	preload(\"res://sprites/number_large_1.png\"),
+	preload(\"res://sprites/number_large_2.png\"),
+	preload(\"res://sprites/number_large_3.png\"),
+	preload(\"res://sprites/number_large_4.png\"),
+	preload(\"res://sprites/number_large_5.png\"),
+	preload(\"res://sprites/number_large_6.png\"),
+	preload(\"res://sprites/number_large_7.png\"),
+	preload(\"res://sprites/number_large_8.png\"),
+	preload(\"res://sprites/number_large_9.png\")
+]
 
 func _ready():
 	game.connect(\"score_current_changed\", self, \"_on_score_current_changed\")
+	set_number(game.score_current)
 	pass
 
 func _on_score_current_changed():
-	set_text(str(game.score_current))
+	set_number(game.score_current)
 	pass
 
+
+func set_number(number):
+	for child in get_children():
+		child.queue_free()
+	
+	for digit in utils.get_digits(number):
+		var texture_frame = TextureFrame.new()
+		texture_frame.set_texture(sprite_numbers[digit])
+		add_child(texture_frame)
+	pass
 "
 
 [node name="world" type="Node"]
@@ -92,6 +108,7 @@ scale = Vector2( 1, 1 )
 
 [node name="btn_instructions" type="TextureButton" parent="hud"]
 
+editor/display_folded = true
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
@@ -121,24 +138,31 @@ margin/bottom = 153.0
 texture = ExtResource( 6 )
 stretch_mode = 0
 
-[node name="lbl_score" type="Label" parent="hud"]
+[node name="hbox_score" type="HBoxContainer" parent="hud"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 10.0
+margin/right = 144.0
+margin/bottom = 28.0
+custom_constants/separation = 2
+alignment = 1
+script/script = SubResource( 2 )
+
+[node name="text_number_0" type="TextureFrame" parent="hud/hbox_score"]
 
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
-size_flags/vertical = 0
-margin/left = 0.0
-margin/top = 10.0
-margin/right = 144.0
-margin/bottom = 25.0
-custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-text = "0"
-align = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-script/script = SubResource( 3 )
+size_flags/vertical = 2
+margin/left = 66.0
+margin/top = 0.0
+margin/right = 78.0
+margin/bottom = 18.0
+texture = ExtResource( 7 )
+stretch_mode = 0
 
 
